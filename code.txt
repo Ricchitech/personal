@@ -1,0 +1,23 @@
+
+// call backs
+
+callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl
+    },
+    async session({ session, token, user }) {
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      return token
+    }
+  }
+
+
+  NEXTAUTH_URL="http://localhost:3000/"
+NEXTAUTH_URL_INTERNAL="http://localhost/"
+AUTH_SECRET="RB455PX99QNPPY5ZOzUa5fSmiXQn3HcLa8w/GrB1MQ8="
+NEXTAUTH_SECRET="RB455PX99QNPPY5ZOzUa5fSmiXQn3HcLa8w/GrB1MQ8="

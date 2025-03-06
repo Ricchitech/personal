@@ -1,17 +1,90 @@
+/* groovylint-disable VariableName */
+/* groovylint-disable-next-line CompileStatic */
 pipeline {
     agent any
+
+    // environment {
+    //     NODE_HOME = tool name: 'NodeJS', type:'nodejs'
+    //     PATH = "${NODE_HOME}/bin:${env.PATH}"
+    // }
+
     stages {
-        stage('Build') { 
+        stage('Git Checkout') {
             steps {
-                sh 'npm install' 
+                git credentialsId: '34ec1752-7073-4d0e-95c7-dda8e8d971d2', url: 'https://github.com/Ricchitech/personal.git', branch:'master'
+            }
+        }
+
+        stage('Check Node Version') {
+            steps {
+                sh 'node -v'
+                sh 'npm -v'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Build') {
+            steps {
                 sh 'npm run build'
+                sh 'npm run start --port 80'
             }
         }
-         stage('Deploy') { 
-            steps {
-                sh 'sudo rm -rf /var/www/' 
-                sh 'sudo cp -r ${WORKSPACE}/build/ /var/www/' 
-            }
-        }
+
+        // stage('Deploy') {
+        //     steps {
+        //         sh 'sudo rm -rf /var/www/'
+        //         sh 'sudo cp -r ${WORKSPACE}/build/ /var/www/'
+        //     }
+        // }
+
+        // stage('Deploy to EC2') {
+        //     steps {
+        //         script {
+        //             /* groovylint-disable-next-line NoDef, UnusedVariable, VariableTypeRequired */
+        //             def ec2_ip = 'ec2-13-60-199-43.eu-north-1.compute.amazonaws.com'
+        //             def ec2_user = 'ubuntu'
+        //             def key_path = '/var/lib/jenkins/bharath.pem'
+
+        //             // SSH into ECS instance deploy the application
+
+        //             sh """
+        //             ls /var/lib/jenkins
+        //             ssh -i ${key_path} -o StrictHostKeyChecking=no -t ${ec2_user}@${ec2_ip} << EOF
+        //             mkdir -p /home/ubuntu/personalwebserver && cd /home/ubuntu/personalwebserver
+        //             cd /var/www
+        //             git clone https://github.com/Ricchitech/personal.git || cd personal
+        //             cd personal
+        //             npm install
+        //             npm run build
+        //             npm start
+        //             EOF
+        //             """
+        //         }
+        //     }
+        // }
     }
 }
+
+       
+    stage('Deploy to EC2') {
+            steps {
+                script {
+                    // SSH into ECS instance deploy the application
+                    sh """
+                    ls /var/lib/jenkins
+                    ssh -i ${key_path} -o StrictHostKeyChecking=no -t ${ec2_user}@${ec2_ip} << EOF
+                    mkdir -p /home/ubuntu/personalwebserver && cd /home/ubuntu/personalwebserver
+                    cd /var/www
+                    git clone https://github.com/Ricchitech/personal.git || cd personal
+                    cd personal
+                    npm install
+                    npm run build
+                    npm start
+                    EOF
+                    """
+                }
+            }
+        }
