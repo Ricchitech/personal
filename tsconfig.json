@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/mongodb.js", "src/app/layout.tsx", "src/app/api/auth/[...nextauth]/route.js", "src/app/page.jsx", "src/app/register/page.jsx", "src/components/RegisterForm.jsx", "src/components/LoginForm.jsx", "src/components/UserInfo.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/mongodb.js", "src/app/layout.tsx", "src/app/api/auth/[...nextauth]/route.js", "src/app/page.jsx", "src/app/register/page.jsx", "src/components/auth/RegisterForm.jsx", "src/components/auth/LoginForm.jsx", "src/components/DashBoardUser/Dashboard.jsx", "src/app/dashboard/page.jsx", "src/layout/AppSidebar.tsx", "src/statemanager/BaseContext.js", "src/statemanager/useBaseContext.js"],
   "exclude": ["node_modules"]
 }
